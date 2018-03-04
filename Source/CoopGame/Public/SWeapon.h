@@ -70,11 +70,4 @@ protected:
 	float RateOfFire;
 
 	float TimeBetweenShots;
-
-	float Recoil;
-	float RecoilRecovery;
-
-public:
-
-	virtual void Tick(float DeltaTime) override;
 };

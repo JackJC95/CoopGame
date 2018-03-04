@@ -22,8 +22,6 @@ FAutoConsoleVariableRef CVARDebugWeaponDrawing(
 // Sets default values
 ASWeapon::ASWeapon()
 {
-	PrimaryActorTick.bCanEverTick = true;
-
 	MeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComp"));
 	RootComponent = MeshComp; 
 
@@ -112,29 +110,6 @@ void ASWeapon::Fire()
 		PlayFireEffects(TracerEndPoint);
 
 		LastFireTime = GetWorld()->TimeSeconds;
-
-		Recoil -= 0.2;
-	}
-}
-
-void ASWeapon::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	APawn* MyOwner = Cast<APawn>(GetOwner());
-	if (MyOwner)
-	{
-		APlayerController* PC = Cast<APlayerController>(MyOwner->GetController());
-		float ApplyPitch;
-
-		Recoil = FMath::FInterpTo(Recoil, 0, DeltaTime, 10.0f);
-		RecoilRecovery = FMath::FInterpTo(RecoilRecovery, -Recoil, DeltaTime, 20.0f);
-		ApplyPitch = Recoil + RecoilRecovery;
-
-		if (PC)
-		{
-			PC->AddPitchInput(ApplyPitch);
-		}
 	}
 }
 
