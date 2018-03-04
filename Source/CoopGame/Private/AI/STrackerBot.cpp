@@ -7,6 +7,7 @@
 #include "AI/Navigation/NavigationPath.h"
 #include "GameFramework/Character.h"
 #include "DrawDebugHelpers.h"
+#include "SHealthComponent.h"
 
 // Sets default values
 ASTrackerBot::ASTrackerBot()
@@ -19,7 +20,10 @@ ASTrackerBot::ASTrackerBot()
 	MeshComp->SetSimulatePhysics(true);
 	RootComponent = MeshComp;
 
-	bUseVelocityChange = false;
+	HealthComp = CreateDefaultSubobject<USHealthComponent>(TEXT("HealthComp"));
+	HealthComp->OnHealthChanged.AddDynamic(this, &ASTrackerBot::HandleTakeDamage);
+
+	bUseVelocityChange = true;
 	MovementForce = 1000;
 	RequiredDistanceToTarget = 100;
 }
@@ -30,6 +34,15 @@ void ASTrackerBot::BeginPlay()
 	Super::BeginPlay();
 	
 	NextPathPoint = GetNextPathPoint();
+}
+
+void ASTrackerBot::HandleTakeDamage(USHealthComponent * OwningHealthComp, float Health, float HealthDelta, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
+{
+	// Explode on hitpoints == 0
+
+	// TODO pulse the material on hit
+
+	UE_LOG(LogTemp, Warning, TEXT("Health %s of %s"), *FString::SanitizeFloat(Health), *GetName())
 }
 
 FVector ASTrackerBot::GetNextPathPoint()
