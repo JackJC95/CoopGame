@@ -80,7 +80,7 @@ void ASCharacter::StartFire()
 {
 	if (CurrentWeapon)
 	{
-		CurrentWeapon->StartFire();
+		CurrentWeapon->StartFire();		
 	}
 }
 
